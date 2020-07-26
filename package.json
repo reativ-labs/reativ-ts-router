@@ -1,0 +1,23 @@
+{
+  "name": "@reativ/router",
+  "version": "0.0.1",
+  "description": "Simple typescript router to use with hash location strategy or HTML 5 History API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "author": {
+    "name": "Francisco Costa",
+    "email": "f.costa@reativ.com",
+    "url": "https://reativ.com"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "tsc"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "prettier": "2.0.5",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.7"
+  }
+}
