@@ -10,11 +10,16 @@
     "email": "f.costa@reativ.com",
     "url": "https://reativ.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reativ-solutions/reativ-ts-router"
+  },
   "scripts": {
     "build": "tsc",
     "prepublish": "tsc"
   },
   "devDependencies": {
+    "@types/node": "^14.0.26",
     "eslint": "^7.5.0",
     "prettier": "2.0.5",
     "tslint": "^6.1.2",

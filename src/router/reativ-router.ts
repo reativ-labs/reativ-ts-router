@@ -22,6 +22,8 @@ export class ReativRouter extends ReativEventDispatcher {
     private routes: Route[] = [];
     private locationStrategy: LocationStrategy;
 
+    private current: string;
+    private interval: NodeJS.Timeout;
 
     constructor(options?: RouterOptions) {
         super();
@@ -68,7 +70,8 @@ export class ReativRouter extends ReativEventDispatcher {
 
     navigate(path: string): this {
         if (this.locationStrategy === LocationStrategy.HISTORY) {
-            history.pushState(null, null, this.initialPath + path);
+             history.pushState(null, null, this.initialPath + this.clearSlashes(path));
+
         } else {
             location.href = `${location.href.replace(/#(.*)$/, '')}#${path}`;
         }
@@ -79,10 +82,48 @@ export class ReativRouter extends ReativEventDispatcher {
         if (this.locationStrategy === LocationStrategy.HASH) {
             window.addEventListener('hashchange', this.handleChange.bind(this));
         } else {
-            // TODO: On history.pushState or history.replaceState
+            // clearInterval(this.interval);
+            // this.interval = setInterval(() => {
+            //     if (this.current === this.getFragment()) {
+            //         return;
+            //     }
+            //     this.current = this.getFragment();
+
+            //     this.routes.some((route: Route) => {
+            //         const match = this.current.match(route.path);
+            //         if (match) {
+            //             match.shift();
+            //             route.callback(...match);
+            //             return match;
+            //         }
+            //         return false;
+            //     });
+            // }, 50);
         }
 
         this.handleChange();
+    }
+
+    private clearSlashes(path: string) {
+        return path
+            .toString()
+            .replace(/\/$/, '')
+            .replace(/^\//, '')
+    }
+
+    private getFragment(): string {
+        let fragment = '';
+
+        if (this.locationStrategy === LocationStrategy.HISTORY) {
+            fragment = this.clearSlashes(decodeURI(window.location.pathname + window.location.search));
+            fragment = fragment.replace(/\?(.*)$/, '');
+            fragment = this.initialPath !== '/' ? fragment.replace(this.initialPath, '') : fragment;
+        } else {
+            const match = window.location.href.match(/#(.*)$/);
+            fragment = match ? match[1] : '';
+        }
+
+        return this.clearSlashes(fragment);
     }
 
     private handleChange(event?: HashChangeEvent): void {
